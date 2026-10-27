@@ -18,11 +18,17 @@
     .eyebrow{padding:7px 11px 6px;border:1px solid rgba(168,107,255,.2);border-radius:999px;background:rgba(168,107,255,.045);color:#c0a8f5;font-size:10px;font-weight:700;letter-spacing:.18em}
     h1{margin:20px 0 14px;font-size:clamp(43px,8vw,76px);line-height:1.02;letter-spacing:-.068em;font-weight:820}h1 span{display:block;background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent}
     .intro{max-width:570px;margin:0;color:var(--muted);font-size:clamp(14px,2.2vw,17px);line-height:1.85}
+    .download-links{width:min(100%,1332px);margin-top:34px;display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:nowrap}
+    .download-links-cn{margin-top:14px}
+    .release-link{width:240px;display:inline-flex;line-height:0;border-radius:17px;transition:transform 160ms ease,filter 160ms ease}
+    .release-link:hover{transform:translateY(-2px);filter:brightness(1.06)}
+    .release-link:active{transform:scale(.99)}
+    .release-badge{display:block;width:100%;height:auto;border-radius:17px}
     .actions{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:30px}.button{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 19px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.035);font-size:13px;font-weight:650;transition:transform .16s ease,border-color .16s ease,background .16s ease}.button:hover{transform:translateY(-2px);border-color:rgba(196,167,255,.4);background:rgba(255,255,255,.07)}.button.primary{background:#eee5ff;color:#21182e;border-color:transparent}.button.primary:hover{background:#fff}
     .meta{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:10px 14px;margin-top:24px;color:#898195;font-size:12px}.dot{width:3px;height:3px;border-radius:50%;background:#70687d}
     .features{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:100%;margin:0 0 28px}.feature{padding:20px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(155deg,rgba(255,255,255,.045),rgba(255,255,255,.015))}.feature strong{display:block;margin-bottom:7px;font-size:14px}.feature p{margin:0;color:var(--muted);font-size:12px;line-height:1.75}
     footer{display:flex;justify-content:space-between;gap:14px;padding-top:24px;border-top:1px solid rgba(255,255,255,.07);color:#81798e;font-size:11px}footer nav{display:flex;flex-wrap:wrap;gap:16px}footer a:hover{color:var(--text)}
-    @media(max-width:650px){.site{width:calc(100% - 28px);padding-top:19px}.hero{padding:7vh 0}.features{grid-template-columns:1fr}.feature{padding:17px}footer{flex-direction:column}.top-link{font-size:11px}}
+    @media(max-width:650px){.site{width:calc(100% - 28px);padding-top:19px}.hero{padding:7vh 0}.download-links{width:100%;margin-top:30px;gap:12px;flex-wrap:wrap}.download-links-cn{margin-top:12px}.release-link{width:min(210px,100%)}.features{grid-template-columns:1fr}.feature{padding:17px}footer{flex-direction:column}.top-link{font-size:11px}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}}
   </style>
 </head>
@@ -35,9 +41,21 @@
       <div class="eyebrow">FASTSEND FOR ANDROID</div>
       <h1>让文件传输<span>更自由一些</span></h1>
       <p class="intro">FastSend · 快速互传是一个探索跨设备文件传输方式的 Android 开源项目。希望让用户按设备能力与使用场景，选择合适的互传方式。</p>
-      <div class="actions">
-        <a class="button primary" href="https://github.com/SteveYuanlong9321/FastSend/releases/latest" target="_blank" rel="noopener noreferrer">下载最新版本 ↗</a>
-        <a class="button" href="https://github.com/SteveYuanlong9321/FastSend" target="_blank" rel="noopener noreferrer">查看开源代码</a>
+      <div class="download-links">
+        <a class="release-link" href="https://github.com/SteveYuanlong9321/FastSend/releases" target="_blank" rel="noopener noreferrer" aria-label="Download on GitHub Releases">
+          <img class="release-badge" src="https://raw.githubusercontent.com/SteveYuanlong9321/AppSpace/main/docs/assets/github-releases-badge.png?v=1.0.8" alt="Download on GitHub Releases">
+        </a>
+        <a class="release-link" href="https://steve0309.dpdns.org/fdroid/repo/" target="_blank" rel="noopener noreferrer" aria-label="Get it from Steve’s F-Droid repository">
+          <img class="release-badge" src="https://raw.githubusercontent.com/SteveYuanlong9321/AppSpace/main/docs/assets/fdroid-badge.png?v=1.0.8" alt="Get it on F-Droid">
+        </a>
+      </div>
+      <div class="download-links download-links-cn" aria-label="中国网盘下载">
+        <a class="release-link" href="https://pan.quark.cn/s/996ac925257e" target="_blank" rel="noopener noreferrer" aria-label="下载于夸克网盘">
+          <img class="release-badge" src="https://raw.githubusercontent.com/SteveYuanlong9321/Tickets/main/assets/quark-badge.png?v=20261007-01" alt="下载于夸克网盘">
+        </a>
+        <a class="release-link" href="https://pan.xunlei.com/s/VP3Is1vTUT8yOkE4wLNF772PA1?pwd=rq3v#" target="_blank" rel="noopener noreferrer" aria-label="下载于迅雷云盘">
+          <img class="release-badge" src="https://raw.githubusercontent.com/SteveYuanlong9321/Tickets/main/assets/xunlei-badge.png?v=20261007-01" alt="下载于迅雷云盘">
+        </a>
       </div>
       <div class="meta"><span>Android</span><span class="dot"></span><span>Apache-2.0</span><span class="dot"></span><a href="https://github.com/SteveYuanlong9321/FastSend/releases">GitHub Releases</a></div>
     </section>
