@@ -1,4 +1,4 @@
-# FastSend（快速互传）
+# 快速互传（FastSend）
 
 FastSend 是一款开源的 Android 文件互传应用，目标是让附近设备之间传输文件变得简单、快捷。
 
