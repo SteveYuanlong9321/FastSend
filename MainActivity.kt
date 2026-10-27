@@ -74,6 +74,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -93,11 +94,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
+import java.net.HttpURLConnection
+import java.net.URL
 import java.net.ServerSocket
 import java.net.Socket
 import java.util.concurrent.CopyOnWriteArrayList
@@ -746,6 +750,9 @@ private fun FastSendScreen(
     ) {
         var edgeDragEligible by remember { mutableStateOf(false) }
         var edgeDragDistance by remember { mutableStateOf(0f) }
+        var updateChecking by remember { mutableStateOf(false) }
+        var updateDialog by remember { mutableStateOf<UpdateDialogInfo?>(null) }
+        val updateScope = rememberCoroutineScope()
 
         Column(
             modifier = Modifier
@@ -870,18 +877,136 @@ private fun FastSendScreen(
                 item {
                     Button(
                         onClick = {
-                            Toast.makeText(context, "检查更新功能将在后续版本接入", Toast.LENGTH_SHORT).show()
+                            if (!updateChecking) {
+                                updateChecking = true
+                                updateScope.launch {
+                                    updateDialog = try {
+                                        withContext(Dispatchers.IO) {
+                                            checkFastSendUpdate(context)
+                                        }
+                                    } catch (error: Exception) {
+                                        UpdateDialogInfo(
+                                            title = "检查更新失败",
+                                            message = "无法连接 GitHub 获取版本信息。请检查网络后重试。\\n\\n${error.localizedMessage ?: error.javaClass.simpleName}"
+                                        )
+                                    } finally {
+                                        updateChecking = false
+                                    }
+                                }
+                            }
                         },
+                        enabled = !updateChecking,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("检查更新")
+                        Text(if (updateChecking) "正在检查更新…" else "检查更新")
                     }
                 }
             }
         }
+
+        updateDialog?.let { info ->
+            AlertDialog(
+                onDismissRequest = { updateDialog = null },
+                title = { Text(info.title) },
+                text = { Text(info.message) },
+                confirmButton = {
+                    if (!info.downloadUrl.isNullOrBlank()) {
+                        TextButton(onClick = {
+                            val url = info.downloadUrl
+                            updateDialog = null
+                            runCatching {
+                                context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                            }.onFailure {
+                                Toast.makeText(context, "无法打开下载链接", Toast.LENGTH_SHORT).show()
+                            }
+                        }) {
+                            Text("前往下载")
+                        }
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { updateDialog = null }) { Text("关闭") }
+                }
+            )
+        }
     }
 }
 
+
+private data class UpdateDialogInfo(
+    val title: String,
+    val message: String,
+    val downloadUrl: String? = null
+)
+
+private fun checkFastSendUpdate(context: Context): UpdateDialogInfo {
+    val apiUrl = URL("https://api.github.com/repos/SteveYuanlong9321/FastSend/releases/latest")
+    val connection = (apiUrl.openConnection() as HttpURLConnection).apply {
+        requestMethod = "GET"
+        connectTimeout = 10000
+        readTimeout = 10000
+        setRequestProperty("Accept", "application/vnd.github+json")
+        setRequestProperty("User-Agent", "FastSend-Android")
+    }
+
+    try {
+        if (connection.responseCode !in 200..299) {
+            throw java.io.IOException("GitHub 返回 HTTP ${connection.responseCode}")
+        }
+        val json = connection.inputStream.bufferedReader(Charsets.UTF_8).use { it.readText() }
+        val release = JSONObject(json)
+        val latestTag = release.optString("tag_name", "").removePrefix("v").trim()
+        if (latestTag.isBlank()) throw java.io.IOException("发布信息中没有版本号")
+
+        val currentVersion = context.packageManager
+            .getPackageInfo(context.packageName, 0).versionName.orEmpty()
+            .removePrefix("v").trim()
+
+        fun versionParts(value: String): List<Int> =
+            value.substringBefore("-").split(".").map { it.toIntOrNull() ?: 0 }
+
+        fun isNewer(latest: String, current: String): Boolean {
+            val a = versionParts(latest)
+            val b = versionParts(current)
+            for (i in 0 until maxOf(a.size, b.size)) {
+                val av = a.getOrElse(i) { 0 }
+                val bv = b.getOrElse(i) { 0 }
+                if (av != bv) return av > bv
+            }
+            return false
+        }
+
+        if (!isNewer(latestTag, currentVersion)) {
+            return UpdateDialogInfo(
+                title = "已是最新版本",
+                message = "当前版本：$currentVersion\\nGitHub 最新版本：$latestTag\\n\\nFastSend 已经是最新版本。"
+            )
+        }
+
+        val assets = release.optJSONArray("assets")
+        var apkUrl: String? = null
+        if (assets != null) {
+            for (i in 0 until assets.length()) {
+                val asset = assets.optJSONObject(i) ?: continue
+                val name = asset.optString("name", "")
+                if (name.endsWith(".apk", ignoreCase = true)) {
+                    apkUrl = asset.optString("browser_download_url").takeIf { it.startsWith("https://") }
+                    if (apkUrl != null) break
+                }
+            }
+        }
+        val releaseUrl = release.optString("html_url", "https://github.com/SteveYuanlong9321/FastSend/releases/latest")
+        val downloadUrl = apkUrl ?: releaseUrl
+        val notes = release.optString("body", "").trim().ifBlank { "此版本暂无更新说明。" }
+        return UpdateDialogInfo(
+            title = "发现新版本：$latestTag",
+            message = "当前版本：$currentVersion\\n最新版本：$latestTag\\n\\n更新说明：\\n$notes",
+            downloadUrl = downloadUrl
+        )
+    } finally {
+        connection.disconnect()
+    }
+}
 
 private fun createQrBitmap(content: String, size: Int): Bitmap? {
     if (content.isBlank() || size <= 0) return null
