@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <meta name="description" content="FastSend 快速互传：开源 Android 文件互传应用。">
+  <title>FastSend · 快速互传</title>
+  <style>
+    :root{color-scheme:dark;--bg:#0b1020;--panel:#141c2f;--text:#edf2ff;--muted:#aab6d0;--accent:#7cafff;--line:#293650}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(ellipse at top,#1c2c4a 0,var(--bg) 55%);color:var(--text);line-height:1.7}
+    .wrap{width:min(920px,calc(100% - 32px));margin:auto}
+    header{padding:26px 0;display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line)}
+    .brand{font-weight:800;font-size:1.2rem;letter-spacing:.3px}
+    a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+    .hero{padding:76px 0 48px}
+    .tag{display:inline-block;padding:5px 12px;border:1px solid #38517b;border-radius:999px;color:#b8d4ff;font-size:.9rem}
+    h1{font-size:clamp(2.5rem,8vw,4.7rem);line-height:1.08;letter-spacing:-.04em;margin:20px 0}
+    .lead{font-size:1.15rem;color:var(--muted);max-width:680px}
+    .actions{display:flex;flex-wrap:wrap;gap:12px;margin:28px 0}
+    .btn{display:inline-block;padding:11px 18px;border-radius:12px;font-weight:700;border:1px solid #3a4d6b}
+    .primary{background:#dbeafe;color:#101827;border-color:#dbeafe}
+    section{padding:26px 0}
+    h2{font-size:1.45rem;margin:0 0 14px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+    .card{background:rgba(20,28,47,.82);border:1px solid var(--line);border-radius:16px;padding:20px}
+    .card h3{margin:0 0 8px;font-size:1.05rem}
+    .card p,.muted{margin:0;color:var(--muted)}
+    .notice{border-left:3px solid #e8b86a;padding:10px 14px;color:var(--muted);background:#1c1b23;border-radius:0 10px 10px 0}
+    footer{margin-top:36px;padding:24px 0 38px;border-top:1px solid var(--line);color:var(--muted);font-size:.92rem}
+    @media(max-width:540px){.hero{padding-top:52px}header{align-items:flex-start;flex-direction:column}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">⚡ FastSend · 快速互传</div>
+      <nav><a href="https://github.com/SteveYuanlong9321/FastSend">项目源码</a>　<a href="https://github.com/SteveYuanlong9321/FastSend/releases">版本发布</a></nav>
+    </header>
+    <main>
+      <div class="hero">
+        <span class="tag">开源 · Android · Apache 2.0</span>
+        <h1>让文件互传<br>更简单。</h1>
+        <p class="lead">FastSend（快速互传）是一款正在开发中的 Android 文件互传应用，致力于探索多种连接与传输方式，让附近设备之间分享文件更方便。</p>
+        <div class="actions">
+          <a class="btn primary" href="https://github.com/SteveYuanlong9321/FastSend/releases/latest">下载最新版本</a>
+          <a class="btn" href="https://github.com/SteveYuanlong9321/FastSend">查看源码</a>
+          <a class="btn" href="https://github.com/SteveYuanlong9321/FastSend/issues">反馈问题</a>
+        </div>
+        <p class="muted">当前发布版本：v1.0　·　APK 大小约 2.7 MB</p>
+      </div>
+      <section>
+        <h2>项目特点</h2>
+        <div class="grid">
+          <article class="card"><h3>📲 面向 Android</h3><p>围绕 Android 手机和平板的文件互传场景设计。</p></article>
+          <article class="card"><h3>🔗 多种连接方案</h3><p>项目探索 Google Nearby、蓝牙低功耗、NFC 辅助连接和局域网传输等方式；实际可用功能以当前版本为准。</p></article>
+          <article class="card"><h3>🔓 开源透明</h3><p>采用 Apache 2.0 许可证，源码和版本发布集中在 GitHub。</p></article>
+        </div>
+      </section>
+      <section>
+        <h2>安装与更新</h2>
+        <div class="card">
+          <p>前往版本发布页下载 APK，并按照 Android 系统提示完成安装。后续版本和更新说明也会发布在这里。</p>
+          <p style="margin-top:12px"><a href="https://github.com/SteveYuanlong9321/FastSend/releases/latest">打开最新版本下载页 →</a></p>
+        </div>
+      </section>
+      <section>
+        <h2>自建 F-Droid 软件源</h2>
+        <div class="notice">自建软件源正在准备中。目前请通过 GitHub Releases 下载。待软件源索引、签名和构建验证完成后，会在此页面公布添加方式。</div>
+      </section>
+      <section>
+        <h2>参与项目</h2>
+        <div class="grid">
+          <article class="card"><h3>查看源码</h3><p>阅读项目代码与开发进度。</p><p style="margin-top:10px"><a href="https://github.com/SteveYuanlong9321/FastSend">打开 GitHub →</a></p></article>
+          <article class="card"><h3>提交反馈</h3><p>报告问题、分享建议或提出功能需求。</p><p style="margin-top:10px"><a href="https://github.com/SteveYuanlong9321/FastSend/issues">提交 Issue →</a></p></article>
+        </div>
+      </section>
+    </main>
+    <footer>© FastSend 项目 · 使用 Apache License 2.0 开源。<br>本项目仍在开发中，设备兼容性与功能可能随版本变化。</footer>
+  </div>
+</body>
+</html>
